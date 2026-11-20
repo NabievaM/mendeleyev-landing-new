@@ -10,7 +10,7 @@ COPY . .
 # VITE_* o'zgaruvchilari BUILD vaqtida bundle ichiga yoziladi.
 # Nginx /api/ ni backendga proxy qiladi, shuning uchun nisbiy yo'l yetarli.
 ARG VITE_LEAD_API_URL=/api/lead
-ENV VITE_LEAD_API_URL=$VITE_LEAD_API_URL
+# ENV VITE_LEAD_API_URL=$VITE_LEAD_API_URL
 
 RUN npm run build
 
