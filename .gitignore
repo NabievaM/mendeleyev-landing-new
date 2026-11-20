@@ -2,5 +2,4 @@ node_modules/
 dist/
 .env
 .env.backend
-data/
 dist-server/
