@@ -1,6 +1,6 @@
 <template>
   <section
-    class="bg-white pb-14 transition-colors duration-300 dark:bg-ink max-[640px]:pb-10"
+    class="bg-white pb-14 pt-2 transition-colors duration-300 dark:bg-ink max-[640px]:pb-10"
   >
     <div class="logos-marquee__wrap relative w-full overflow-hidden">
       <div

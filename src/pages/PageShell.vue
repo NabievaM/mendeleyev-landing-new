@@ -26,6 +26,7 @@
     <ContactModal
       :open="contactModalOpen"
       :t="t"
+      :lang="lang"
       :submitted="submitted"
       :form-data="formData"
       @close="closeContactModal"

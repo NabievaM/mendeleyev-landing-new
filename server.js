@@ -91,6 +91,7 @@ function buildLeadMessage(lead) {
     "",
     `👤 Ism: ${lead.name}`,
     `📞 Telefon: ${lead.phone}`,
+    `🏫 Filial: ${lead.branch || "—"}`,
     "",
     `${STATUS_LABEL}${STATUS_PENDING}`,
   ].join("\n");
@@ -865,12 +866,16 @@ app.use(
 
 app.post("/api/lead", async (req, res) => {
   try {
-    const { name, phone } = req.body || {};
+    const { name, phone, branch } = req.body || {};
 
-    if (!name?.trim() || !phone?.trim()) {
+    const phoneDigits = String(phone || "").replace(/\D/g, "");
+    const phoneFull =
+      phoneDigits.length === 9 ? `998${phoneDigits}` : phoneDigits;
+
+    if (!name?.trim() || !/^998\d{9}$/.test(phoneFull)) {
       return res.status(400).json({
         success: false,
-        message: "Barcha maydonlarni to‘ldiring.",
+        message: "Ism va telefon raqamni to‘liq kiriting.",
       });
     }
 
@@ -885,6 +890,7 @@ app.post("/api/lead", async (req, res) => {
     const leadText = buildLeadMessage({
       name: name.trim(),
       phone: normalizePhone(phone),
+      branch: String(branch || "").trim().slice(0, 100),
     });
 
     // Ariza barcha adminlarga yuboriladi
@@ -900,7 +906,7 @@ app.post("/api/lead", async (req, res) => {
         sent.push({ chatId: adminId, messageId: data.result.message_id });
       } else {
         console.error(`Telegram API error (admin ${adminId}):`, data);
-      }
+      } 
     }
 
     // Kamida bitta adminga yetib borsa — ariza qabul qilingan hisoblanadi

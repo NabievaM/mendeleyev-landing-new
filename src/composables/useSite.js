@@ -10,7 +10,7 @@ export function useSite() {
   const menuOpen = ref(false);
   const submitted = ref(false);
   const contactModalOpen = ref(false);
-  const formData = reactive({ name: "", phone: "", course: "" });
+  const formData = reactive({ name: "", phone: "", course: "", branch: "" });
   const t = computed(() => dict[lang.value]);
 
   function openContactModal() {
@@ -44,8 +44,11 @@ export function useSite() {
       return;
     }
 
-    if (!formData.name.trim() || !formData.phone.trim()) {
-      alert("Iltimos, barça maydonlarni töldiring.");
+    const phoneOk = /^\+998 \d{2}-\d{3}-\d{2}-\d{2}$/.test(
+      formData.phone.trim()
+    );
+    if (!formData.name.trim() || !phoneOk) {
+      alert("Iltimos, ism va telefon raqamni töliq kiriting.");
       return;
     }
 
@@ -56,6 +59,7 @@ export function useSite() {
         body: JSON.stringify({
           name: formData.name.trim(),
           phone: formData.phone.trim(),
+          branch: formData.branch,
         }),
       });
 
@@ -70,6 +74,7 @@ export function useSite() {
       submitted.value = true;
       formData.name = "";
       formData.phone = "";
+      formData.branch = "";
 
       if (contactModalOpen.value) {
         setTimeout(closeContactModal, 3000);

@@ -9,7 +9,7 @@
   >
     <div
       v-if="open"
-      class="fixed inset-0 z-[300] flex items-center justify-center bg-black/65 backdrop-blur-sm p-4"
+      class="fixed inset-0 z-[300] flex items-center justify-center bg-black/65 backdrop-blur-sm p-4 max-[480px]:p-3"
       @click.self="close"
     >
       <Transition
@@ -23,7 +23,7 @@
       >
         <div
           v-if="open"
-          class="relative w-full max-w-125 rounded-[26px] bg-white dark:bg-ink px-7 py-9 max-[480px]:px-5 max-[480px]:py-7 shadow-2xl"
+          class="relative w-full max-w-125 max-h-[92dvh] overflow-y-auto rounded-[26px] bg-white dark:bg-ink px-7 py-9 max-[480px]:px-5 max-[480px]:py-6 shadow-2xl"
         >
           <!-- CLOSE BUTTON -->
           <button
@@ -51,38 +51,34 @@
           <template v-if="!submitted">
             <!-- HEADING -->
             <h3
-              class="max-w-90 mx-auto text-center text-[26px] max-[480px]:text-[22px] font-extrabold leading-[1.25] text-ink dark:text-white"
+              class="max-w-90 mx-auto text-center text-[26px] max-[480px]:text-[20px] max-[480px]:max-w-65 max-[480px]:pt-1 font-extrabold leading-[1.25] text-ink dark:text-white"
             >
               {{ t.contactTitle }}
             </h3>
             <p
-              class="mt-3 text-center text-[15px] leading-[1.55] text-gray-400 dark:text-white/60"
+              class="mt-3 max-[480px]:mt-2 text-center text-[15px] max-[480px]:text-[13.5px] leading-[1.5] text-gray-400 dark:text-white/60"
             >
               {{ t.contactSub }}
             </p>
 
             <!-- FORM -->
             <form
-              @submit.prevent="$emit('submit')"
-              class="mt-7 flex flex-col gap-3.5"
+              @submit.prevent="canSubmit && $emit('submit')"
+              class="mt-7 max-[480px]:mt-4 flex flex-col gap-3.5 max-[480px]:gap-2.5"
             >
               <input
                 type="text"
                 v-model="formData.name"
                 :placeholder="t.form.namePh"
                 required
-                class="w-full rounded-xl border border-gray-200 dark:border-white/15 bg-transparent px-5 py-4 text-[15px] text-ink placeholder-gray-400 outline-none transition-colors duration-200 focus:border-red-400 dark:text-white dark:placeholder-white/40"
+                class="w-full rounded-xl border border-gray-200 dark:border-white/15 bg-transparent px-5 py-4 max-[480px]:py-3 text-[15px] max-[480px]:text-[16px] text-ink placeholder-gray-400 outline-none transition-colors duration-200 focus:border-red-400 dark:text-white dark:placeholder-white/40"
               />
 
               <div
-                class="flex w-full items-center gap-2.5 rounded-xl border border-gray-200 dark:border-white/15 px-5 py-4 transition-colors duration-200 focus-within:border-red-400"
+                class="flex w-full items-center gap-2.5 rounded-xl border border-gray-200 dark:border-white/15 px-5 py-4 max-[480px]:py-3 transition-colors duration-200 focus-within:border-red-400"
               >
                 <span class="inline-block shrink-0 overflow-hidden rounded-xs">
-                  <img
-                    class="h-5 w-8"
-                    src="/images/ozb-flag.webp"
-                    alt=""
-                  />
+                  <img class="h-5 w-8" src="/images/ozb-flag.webp" alt="" />
                 </span>
 
                 <input
@@ -92,20 +88,35 @@
                   placeholder="+998 **-***-**-**"
                   maxlength="17"
                   required
-                  class="flex-1 bg-transparent text-[15px] text-ink placeholder-gray-400 outline-none dark:text-white dark:placeholder-white/40"
+                  class="flex-1 min-w-0 bg-transparent text-[15px] max-[480px]:text-[16px] text-ink placeholder-gray-400 outline-none dark:text-white dark:placeholder-white/40"
                 />
               </div>
 
+              <p
+                v-if="phoneTouched && !phoneOk"
+                class="-mt-2 px-1 text-[12.5px] text-red-500"
+              >
+                {{ t.form.phoneError }}
+              </p>
+
+              <!-- FILIAL TANLASH -->
+              <BranchSelect
+                v-model="formData.branch"
+                :options="branches"
+                :placeholder="t.form.branchPh"
+              />
+
               <button
                 type="submit"
-                class="mt-1 w-full cursor-pointer rounded-xl bg-red-500 px-7 py-4.5 text-[15.5px] font-bold text-white transition-colors duration-200 hover:bg-red-600"
+                :disabled="!canSubmit"
+                class="mt-1 w-full cursor-pointer rounded-xl bg-red-500 px-7 py-4.5 max-[480px]:py-3.5 text-[15.5px] font-bold text-white transition-colors duration-200 hover:bg-red-600 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-red-500"
               >
                 {{ t.form.submit }}
               </button>
             </form>
 
             <p
-              class="mt-4 text-center text-[12.5px] leading-[1.5] text-gray-400 dark:text-white/45"
+              class="mt-4 max-[480px]:mt-3 text-center text-[12.5px] leading-[1.5] text-gray-400 dark:text-white/45"
             >
               {{ t.form.note }}
             </p>
@@ -118,7 +129,9 @@
                 src="/images/logo.webp"
                 alt=""
               />
-              <h3 class="mb-2 mt-4 text-[22px] font-bold text-ink dark:text-white">
+              <h3
+                class="mb-2 mt-4 text-[22px] font-bold text-ink dark:text-white"
+              >
                 {{ t.form.thanksTitle }}
               </h3>
               <p class="text-[15px] text-gray-400 dark:text-white/60">
@@ -133,11 +146,14 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, watch } from "vue";
+import { schools, learningCenters } from "../data/landing";
+import BranchSelect from "./BranchSelect.vue";
 
 const props = defineProps({
   open: Boolean,
   t: Object,
+  lang: { type: String, default: "uz" },
   submitted: Boolean,
   formData: Object,
 });
@@ -147,6 +163,27 @@ const emit = defineEmits(["close", "submit", "formatPhone"]);
 function close() {
   emit("close");
 }
+
+// ============================================================
+// FILIALLAR RO'YXATI VA TEKSHIRUV
+// ============================================================
+
+const branches = computed(() =>
+  [...schools, ...learningCenters].map((b) => ({
+    id: b.id,
+    value: b.name.uz, // botga doim o‘zbekcha nom ketadi
+    label: b.name[props.lang] || b.name.uz,
+  }))
+);
+
+const phoneOk = computed(() =>
+  /^\+998 \d{2}-\d{3}-\d{2}-\d{2}$/.test((props.formData.phone || "").trim())
+);
+const phoneTouched = computed(() => (props.formData.phone || "").length > 4);
+
+const canSubmit = computed(
+  () => !!props.formData.name.trim() && phoneOk.value && !!props.formData.branch
+);
 
 // ============================================================
 // ESC KEY TO CLOSE
