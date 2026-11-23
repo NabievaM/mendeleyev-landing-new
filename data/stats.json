@@ -1,1 +1,1 @@
-{"days":{"2026-11-22":{"visits":1,"leads":1,"vids":["2832fead2b34"]}},"contacts":{"1548569662:229":{"day":"2026-11-22","done":true,"msgs":[{"chatId":"1548569662","messageId":229}]}}}
+{"contacts":{"1548569662:229":{"day":"2026-11-22","done":true,"msgs":[{"chatId":"1548569662","messageId":229}]},"1548569662:248":{"day":"2026-11-23","done":false,"msgs":[{"chatId":"1548569662","messageId":248}]}},"days":{"2026-11-22":{"visits":1,"leads":1,"vids":["2832fead2b34"]},"2026-11-23":{"visits":3,"leads":1,"vids":["2832fead2b34","0cc80f2993c5"]}}}

@@ -31,7 +31,7 @@
     </button>
 
     <!-- RO'YXAT: telefonda pastdan chiqadigan oyna, kompyuterda markazda -->
-    <Teleport to="body">
+    <Teleport v-if="mounted" to="body">
       <Transition
         enter-active-class="transition-opacity duration-200"
         enter-from-class="opacity-0"
@@ -128,7 +128,12 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted, ref, watch } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+
+const mounted = ref(false);
+onMounted(() => {
+  mounted.value = true;
+});
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
