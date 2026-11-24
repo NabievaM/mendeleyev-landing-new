@@ -228,11 +228,7 @@ const props = defineProps({
   },
 });
 
-// VITE_LEAD_API_URL = ".../api/lead" -> API bazasi ".../api" (App.vue dagi /visit bilan bir xil usul)
-const API_BASE = (import.meta.env.VITE_LEAD_API_URL || "/api/lead").replace(
-  /\/lead$/,
-  ""
-);
+const API_BASE = "/api";
 
 const texts = {
   uz: {

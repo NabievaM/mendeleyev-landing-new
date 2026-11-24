@@ -114,8 +114,7 @@ export function useSite() {
       if (!vid) return;
       sessionStorage.setItem("visit_counted", "1");
 
-      const leadUrl = import.meta.env.VITE_LEAD_API_URL || "/api/lead";
-      fetch(leadUrl.replace(/\/lead$/, "/visit"), {
+      fetch("/api/visit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ vid }),
