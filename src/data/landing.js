@@ -1056,7 +1056,7 @@ export const schools = [
     phone: "+998 90 401 77 88",
     phoneRaw: "+998904017788",
     telegram: "https://t.me/itschoolkokand",
-    instagram: "https://instagram.com/itschool_kokand",
+    instagram: "https://instagram.com/mendeleyev_itschool",
     mapUrl:
       "https://yandex.com/maps/10332/kokand/house/guzar_ko_chasi_2/Y0kYfwNiTEYBQFpqfXlycXRiZA==/",
     image: "/images/filial/it-school.webp",
